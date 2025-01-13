@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puter.js AI Chat</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <h1>Puter.js AI Chat Example</h1>
+    <select id="modelSelect">
+        <option value="gpt-4o-mini">gpt-4o-mini (default)</option>
+        <option value="gpt-4">gpt-4</option>
+        <option value="claude-3-5-sonnet">claude-3-5-sonnet</option>
+        <option value="meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo">Meta-Llama 8B</option>
+        <option value="meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo">Meta-Llama 70B</option>
+        <option value="meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo">Meta-Llama 405B</option>
+        <option value="mistral-large-latest">Mistral Large</option>
+        <option value="codestral-latest">Codestral</option>
+        <option value="google/gemma-2-27b-it">Gemma 2</option>
+        <option value="grok-beta">Grok Beta</option>
+    </select>
+    <input type="text" id="queryInput" placeholder="Type your question here" />
+    <button id="chatButton">Ask AI</button>
+    <div id="responseContainer" style="margin-top: 20px; border: 1px solid #ccc; padding: 10px;"></div>
+
+    <script>
+        const button = document.getElementById('chatButton');
+        button.addEventListener('click', async () => {
+            const userQuery = document.getElementById('queryInput').value; // Get user input
+            const selectedModel = document.getElementById('modelSelect').value; // Get selected model
+            if (userQuery.trim()) {
+                console.log('Button clicked! Query:', userQuery, 'Model:', selectedModel); // Log user query and model
+                await queryAI(userQuery, selectedModel); // Send the user query to the AI with selected model
+            } else {
+                alert('Please enter a question.'); // Prompt user for input
+            }
+        });
+
+        async function queryAI(prompt, model) {
+            try {
+                console.log('Querying AI with prompt:', prompt, 'Model:', model); // Log prompt and model
+                const response = await puter.ai.chat(prompt, { model: model }); // Call Puter.js with prompt and model
+                if (response) {
+                    console.log('AI Response:', response); // Log the response
+                    document.getElementById('responseContainer').innerText = response; // Display AI response
+                } else {
+                    console.warn('Response from AI was empty.'); // Warning if the response is empty
+                    document.getElementById('responseContainer').innerText = 'No response received from AI.';
+                }
+            } catch (error) {
+                console.error('Error querying AI:', error);
+                document.getElementById('responseContainer').innerText = 'Error querying AI. Check console for details.';
+            }
+        }
+    </script>
+</body>
+</html>
